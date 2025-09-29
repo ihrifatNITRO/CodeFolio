@@ -1,0 +1,137 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <title>Dashboard - CodeFolio</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'dashboard/style.css' %}">
+</head>
+
+<body>
+    {% if user.is_authenticated %}
+    <!-- Fixed Sidebar -->
+    <div class="position-fixed start-0 top-50 translate-middle-y vh-100 sidebar" style="width: 250px; z-index: 1000;">
+        <div class="bg-light border-end p-4 h-100 d-flex flex-column justify-content-center">
+            <h5 class="mb-4">Profile Handles</h5>
+            <form method="post" action="{% url 'dashboard' %}" class="w-100">
+                {% csrf_token %}
+                <div class="mb-3">
+                    <label for="leetcode" class="form-label label">LeetCode Handle</label>
+                    <input type="text" class="form-control" id="leetcode" name="leetcode"
+                        placeholder="Enter LeetCode handle" value="{{ leetcode_handle|default:'' }}">
+                </div>
+                <div class="mb-3">
+                    <label for="codeforces" class="form-label label">CodeForces Handle</label>
+                    <input type="text" class="form-control" id="codeforces" name="codeforces"
+                        placeholder="Enter CodeForces handle" value="{{ codeforces_handle|default:'' }}">
+                </div>
+                <div class="mb-3">
+                    <label for="codechef" class="form-label label">CodeChef Handle</label>
+                    <input type="text" class="form-control" id="codechef" name="codechef"
+                        placeholder="Enter CodeChef handle" value="{{ codechef_handle|default:'' }}">
+                </div>
+                <button type="submit" class="btn btn-primary mb-3 w-100">Update</button>
+            </form>
+            <form method="post" action="{% url 'logout' %}" class="w-100">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger w-100">Logout</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content container-fluid" style="margin-left: 250px; padding-top: 20px;">
+
+        <!-- LeetCode Stats Card -->
+        {% if leetcode_stats %}
+
+        <div class="card mt-4" style="width: 80%;">
+            <div class="card-header">
+                LeetCode Stats for: <strong>{{ leetcode_handle }}</strong>
+            </div>
+            <!-- no. of solved in LeetCode -->
+            <div class="card-body">
+                <h5 class="card-title">Total Solved: {{ leetcode_stats.total }}</h5>
+                <p class="card-text">
+                    <h4>
+                        <span class="badge bg-success rounded-end-0">Easy</span><span class="badge bg-secondary bg-gradient rounded-start-0">{{ leetcode_stats.easy }}</span>
+                        <span class="badge bg-warning text-dark rounded-end-0">Medium</span><span class="badge bg-secondary bg-gradient rounded-start-0">{{ leetcode_stats.medium }}</span>
+                        <span class="badge bg-danger rounded-end-0">Hard</span><span class="badge bg-secondary bg-gradient rounded-start-0">{{ leetcode_stats.hard }}</span>
+                    </h4>
+                </p>
+                
+                <hr>
+
+                <!-- language used in LeetCode -->
+                {% if language_stats %}
+
+                <h5 class="card-title">Languages Used </h5>
+                <p class="card-text">
+                    <h4>
+                        {% for lang_stat in language_stats %}
+                            <span class="badge bg-primary rounded-end-0">{{ lang_stat.0 }}</span><span class="badge bg-secondary bg-gradient rounded-start-0">{{ lang_stat.1 }}</span>
+                        {% endfor %}
+                    </h4>
+                </p>
+
+                {% endif %}
+
+                <hr>
+
+                <!-- skill tags in LeetCode -->
+                {% if skill_stats %}
+                    
+                <h5 class="card-title">Problem Tags</h5>
+                <p class="card-text">
+                <h4>
+                    {% for skill_stat in skill_stats %}
+                    <span class="badge bg-dark bg-gradient rounded-end-0">{{ skill_stat.0 }}</span><span class="badge bg-secondary rounded-start-0">{{ skill_stat.1 }}</span>
+                    {% endfor %}
+                </h4>
+                </p>
+
+                {% endif %}
+
+                <hr>
+                
+                <!-- yearly reports in LeetCode -->
+                {% if yearly_stats %}
+                
+                <h5 class="card-title">Other details</h5>
+                <h4>
+                    <span class="badge bg-info bg-gradient text-dark rounded-end-0">Total submissions in the past one year</span><span class="badge bg-secondary rounded-start-0">{{ yearly_stats.0 }}</span>
+                    <br>
+                    <span class="badge bg-info bg-gradient text-dark rounded-end-0">Total active days</span><span class="badge bg-secondary rounded-start-0">{{ yearly_stats.1 }}</span>
+                    <br>
+                    <span class="badge bg-info bg-gradient text-dark rounded-end-0">Max streaks</span><span class="badge bg-secondary rounded-start-0">{{ yearly_stats.2 }}</span>
+                </h4>
+                
+                {% endif %}
+
+
+            </div>
+        </div>
+        {% endif %}
+        
+        <!-- Error Display -->
+        {% if error %}
+        <div class="alert alert-danger mt-4" role="alert">
+            {{ error }}
+        </div>
+        {% elif not leetcode_stats %}
+        <p class="mt-4 text-muted">Enter a LeetCode handle to fetch stats.</p>
+        {% endif %}
+
+    </div>
+    {% endif %}
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>
