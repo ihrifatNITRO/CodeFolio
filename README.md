@@ -11,14 +11,14 @@ CodeFolio is a full-stack web application built with Django, designed to fetch, 
 
 The application features a secure, custom-built authentication system with email-based OTP verification. Once logged in, users are presented with a personal dashboard where they can input their LeetCode handle to instantly view a comprehensive breakdown of their solved problems, language proficiency, skill tags, and yearly activity.
 
-<!-- <h2>Table of Contents</h2>
+<h2>Table of Contents</h2>
 <ol>
 <li><a href="#features">Features</a></li>
 <li><a href="#project-structure">Project Structure</a></li>
 <li><a href="#setup-and-installation">Setup and Installation</a></li>
 <li><a href="#running-the-application">Running the Application</a></li>
 <li><a href="#future-improvements">Future Improvements</a></li>
-</ol> -->
+</ol>
 
 <h2 id="features">✨ Features</h2>
 
